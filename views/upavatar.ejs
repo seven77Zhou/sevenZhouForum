@@ -1,0 +1,38 @@
+<html>
+	<head>
+		<title>上传头像</title>
+		<link rel="stylesheet" href="/css/style.css" />
+	</head>
+	<body>
+		<div class="title">
+			<h1>七爷论坛</h1>
+			
+			<% if(!ifLogin){%>
+			
+			<div class="buttons">
+				<a href="/login">登录</a>
+				<a href="/regist">注册</a>
+			</div>
+			<%} else{%>
+				<div class="nav d_ib">
+					<a class="mg_l_20 <%= active=='myshuoshuo'?'active':''%>" href="/user/<%=username %>">我的说说</a>
+					<a class="mg_l_20 <%= active=='userlist'?'active':''%>" href="javascript:void(0)">所有用户</a>
+				</div>
+				
+				<div class="welcome">
+					<p>欢迎您<%=username %></p>
+				</div>
+			<%}%>
+		</div>
+		<div class="content">
+			<form action="/setavatar" method="post" enctype="multipart/form-data">
+				<input type="file" name="useravatar" id="" value="上传头像" />
+				<input type="submit" value="上传"/>
+			</form>
+		</div>
+		<script src="/js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			
+		</script>
+	</body>
+</html>

@@ -1,0 +1,152 @@
+<html>
+	<head>
+		<title>七爷论坛</title>
+		<link rel="stylesheet" href="/css/style.css" />
+	</head>
+	<body>
+		<div class="title">
+			<h1>七爷论坛</h1>
+			
+			<% if(!ifLogin){%>
+			
+			<div class="buttons">
+				<a href="/login">登录</a>
+				<a href="/regist">注册</a>
+			</div>
+			<%} else{%>
+				<a class="mg_l_20" href="/user/<%=username %>">我的说说</a>
+				<a class="mg_l_20" href="/userlist">所有用户</a>
+				<div class="welcome">
+					<p>欢迎您<%=username %></p>
+					
+				</div>
+				<a href="/exit">退出</a>
+			<%}%>
+		</div>
+		<div class="index_content">
+			<% if(!ifLogin){%>
+				<div class="f_l">
+					<h2>
+						<span>欢迎！</span>
+					</h2>
+					<p>七爷论坛说是我们沟通交流的园地，欢迎登录/注册</p>
+					<p>&nbsp;&nbsp;<a href="/regist">注册</a></p>
+				</div>
+				<div class="mg_l_400">
+					<h2  class="mg_l_20" >登录</h2>
+					<div class="">
+						<span>用户名：</span>
+						<input type="text" name="username" id="username"/>
+					</div>
+					<div class="">
+						<span>密码：</span>
+						<input type="text" name="password" id="password"/>
+					</div>
+					<input class="mg_l_20" type="button" id="login" value="点击登录" />
+				</div>
+			<%} else{%>
+				<div class="mg_l_20">
+					<a href="/upavatar"><img width="80" src="/avatar/<%=avatar%>"/></a>
+					
+					<h3 class="d_ib">欢迎回来<%=username%></h3>
+					<div class="mg_t_20">
+						
+							<textarea id="textcontent" name="content" rows="15" cols="40"></textarea>
+							<input type="submit" value="发表" id="fabiao"/>
+						
+					</div>
+					<p>最新更新论坛内容如下:</p>
+					
+					<!--<%for(var i = 0; i<posts.length; i++){%>
+					<div class="d_ib shuoshuo">						
+						<span><a href=""><img src="/avatar/<%= posts[i].avatar ? posts[i].avatar: 'moren.jpg'%>" width="30"/></a><b><%=posts[i].name%></b>说：</span>
+						<p><%=posts[i].content%></p>
+						<a href="">查看详细</a>						
+					</div>
+					<%}%>-->
+					<div class="pages">
+						
+					</div>
+					<div class="shuoshuocon"></div>
+				</div>
+			<%}%>
+		</div>
+		<script src="/js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			$('#login').click(function(){
+				$.post('/dologin',{
+					'name':$('#username').val(),
+					'password':$('#password').val()
+				},function(result){
+					if(result=='-3'){
+						alert('服务器错误')
+					}else if(result == '-1'){
+						alert('用户名不存在，请先完成注册')
+					}else if(result == '1'){
+						console.log('登录成功，返回首页');
+						window.location.href='http://192.168.0.158:3000/';
+					}else if(result == '-2'){
+						alert('密码错误')
+					}
+				})
+			})
+			
+			$('#fabiao').click(function(){
+				$.post('/doposts',{
+					'content':$('#textcontent').val()
+				},function(result){
+					if(result=='-3'){
+						alert('服务器错误')
+					}else if(result == '1'){
+						alert('发表成功');
+					}
+				})
+			})
+			getshuoshuo(0)
+			function getshuoshuo(page){
+				//先请求数据库shuoshuo表所有说说数据，再根据每条说说的数据查出对应的shuoshuo表中的人员信息
+				$.get('/getcontent?page='+page,function(result){
+					//每次请求都要清空原页面数据
+					var str = '';
+					$('.shuoshuocon').html('');
+					test(0)
+					function test(i){
+						if(i==result.length){
+							return;
+						}
+						
+						$.get('/getshuoshuo?username='+result[i].name,function(result2){
+							//result[i].avatar = result2[0].avatar?result2[0].avatar:'moren.jpg';
+							str='<div class="d_ib shuoshuo mg_l_20">'+					
+								'<span><a href="/user/'+result2[0].name+'"><img src="/avatar/'+result2[0].avatar+'" width="30" height="30"/></a><b>'+result2[0].name+'</b>说：</span>'+
+								'<p>'+result[i].content+'</p>'+
+								'<div>'+result[i].datetime+'</div>'+
+								'<a href="">查看详细</a></div>'	
+							$('.shuoshuocon').append(str)
+						})
+						test(i+1)						
+					}					
+				})
+			}
+			//计算全部的页数
+			$.get('/getamount',function(result){
+				var pages = Math.ceil(result.length/3);
+				var str = '';
+				for(var i=0;i<pages;i++){
+					if(i==0){
+						str+='<span class="active">'+i+'</span>'
+					}else{
+						str+='<span>'+i+'</span>'
+					}
+					
+				}
+				$('.pages').html(str)
+			})
+			//点击分页
+			$('.pages').on('click','span',function(){
+				$(this).addClass('active').siblings().removeClass('active');
+				getshuoshuo($(this).index())
+			})
+		</script>
+	</body>
+</html>

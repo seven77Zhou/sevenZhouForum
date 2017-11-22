@@ -1,0 +1,58 @@
+<html>
+	<head>
+		<title>七爷论坛</title>
+		<link rel="stylesheet" href="/css/style.css" />
+	</head>
+	<body>
+		<div class="title">
+			<h1>七爷论坛</h1>
+			
+			<% if(!ifLogin){%>
+			
+			<div class="buttons">
+				<a class="<%= active=='login'?'active':''%>" href="/login">登录</a>
+				<a class="<%= active=='regist'?'active':''%>" href="/regist">注册</a>
+			</div>
+			<%} else{%>
+				<div class="nav d_ib">
+					<a class="mg_l_20 <%= active=='myshuoshuo'?'active':''%>" href="/user/<%=username %>">我的说说</a>
+					<a class="mg_l_20 <%= active=='userlist'?'active':''%>" href="javascript:void(0)">所有用户</a>
+				</div>
+				
+				<div class="welcome">
+					<p>欢迎您<%=username %></p>
+				</div>
+				<a href="/exit">退出</a>
+			<%}%>
+		</div>
+		<div class="content">
+			<div class="">
+				<span>用户名：</span>
+				<input type="text" name="username" id="username"/>
+			</div>
+			<div class="">
+				<span>密码：</span>
+				<input type="text" name="password" id="password"/>
+			</div>
+			<input type="button" id="regist" value="点击注册" />
+		</div>
+		<script src="/js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			$('#regist').click(function(){
+				$.post('/doregist',{
+					'name':$('#username').val(),
+					'password':$('#password').val()
+				},function(result){
+					if(result=='-3'){
+						alert('服务器错误')
+					}else if(result == '-1'){
+						alert('用户名已存在，请重新填写')
+					}else if(result == '1'){
+						console.log('注册成功，返回首页');
+						window.location.href='http://192.168.0.158:3000/';
+					}
+				})
+			})
+		</script>
+	</body>
+</html>

@@ -1,0 +1,31 @@
+*{padding: 0;
+margin: 0;}
+a{ text-decoration:none; }
+
+.f_l{float: left;}
+.mg_l_20{ margin-left: 20px;}
+.mg_l_400{ margin-left: 400px;}
+.mg_t_20{margin-top: 20px;}
+.d_ib{display: inline-block;}
+
+.title{padding: 0 20px; height: 60px; line-height: 60px; background: #eee;}
+.title h1{float: left;}
+.title .buttons{float: right;}
+.title .buttons a{margin: 10px; width: 100px; height: 40px; box-sizing: border-box;  line-height: 40px;}
+.title .buttons a.active{background: #ccc;}
+.title .welcome{float: right;}
+.content{ padding-top: 20px;}
+.title .nav a.active{background: #666; color: #000;}
+
+.index_content{ padding-top: 20px; line-height: 60px; overflow: hidden;}
+.index_content img{vertical-align: middle;}
+.index_content span{display: inline-block; margin-left: 20px; line-height: 100px; font-size: 40px;}
+
+.shuoshuo {width: 300px; padding: 10px; background: #eee; margin-bottom: 10px;}
+.shuoshuo span{line-height: 28px; font-size: 14px; margin-left: 0;}
+.shuoshuo p{ font-size: 18px; height:100px ; line-height: 28px; overflow: hidden;}
+
+.pages span{ width: 20px; height: 20px; line-height: 20px; cursor: pointer; font-size: 14px; text-align: center; display: inline-block; margin: 5px; border: 1px solid #000;}
+.pages span.active{ background: #eee;}
+
+.othershuoshuo .one{ margin-top: 20px;}
